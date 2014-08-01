@@ -1,6 +1,6 @@
 import java.io.BufferedReader;
-
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -32,7 +32,14 @@ public class Ddfs {
 		return res[0];
 	}
 
-	public String getBlob(String blobUrl) {
+	public InputStream getBlob(String blobUrl) {
+		int idx = blobUrl.indexOf(':') + 3;
+		String urlAndPath = blobUrl.substring(idx);
+		String res[] = urlAndPath.split("/", 2);
+		return getInputStream(res[0] + ":" + this.port, "/" + res[1]);
+	}
+
+	public String getBlobAsString(String blobUrl) {
 		int idx = blobUrl.indexOf(':') + 3;
 		String urlAndPath = blobUrl.substring(idx);
 		String res[] = urlAndPath.split("/", 2);
@@ -44,6 +51,23 @@ public class Ddfs {
 	}
 
 	private String getUrl(String host, String path) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				getInputStream(host, path)));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+		try {
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response.toString();
+	}
+
+	private InputStream getInputStream(String host, String path) {
 		String url = "http://" + host + path;
 		URL obj = null;
 		try {
@@ -57,16 +81,7 @@ public class Ddfs {
 			con.setRequestMethod("GET");
 			int responseCode = con.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						con.getInputStream()));
-				String inputLine;
-				StringBuffer response = new StringBuffer();
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				in.close();
-				return response.toString();
+				return con.getInputStream();
 			} else {
 				System.out.println("response code is: " + responseCode);
 			}
@@ -78,4 +93,5 @@ public class Ddfs {
 		}
 		return null;
 	}
+
 }
