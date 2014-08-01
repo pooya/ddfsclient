@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -12,15 +13,14 @@ public class Ddfs {
 		return getUrl(master, "/ddfs/tags");
 	}
 
-
-	public String getTag(String master, String tag) {
-		String reply =getUrl(master, "/ddfs/tag/" + tag);
-		return reply;
+	public Tag getTag(String master, String tag) {
+		String reply = getUrl(master, "/ddfs/tag/" + tag);
+		return Tag.getTag(reply);
 	}
-	
+
 	private String getUrl(String master, String path) {
 		String url = "http://" + master + path;
-		 
+
 		URL obj = null;
 		try {
 			obj = new URL(url);
@@ -46,7 +46,7 @@ public class Ddfs {
 			} else {
 				System.out.println("response code is: " + responseCode);
 			}
-			
+
 		} catch (ProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
