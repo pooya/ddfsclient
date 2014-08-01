@@ -8,19 +8,43 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 public class Ddfs {
+	private String master;
+	private String port;
 
-	public String getTags(String master) {
-		return getUrl(master, "/ddfs/tags");
+	public Ddfs(String master, String port) {
+		this.master = master;
+		this.port = port;
 	}
 
-	public Tag getTag(String master, String tag) {
-		String reply = getUrl(master, "/ddfs/tag/" + tag);
+	public String getTags() {
+		return getUrl("/ddfs/tags");
+	}
+
+	public Tag getTag(String tag) {
+		String reply = getUrl("/ddfs/tag/" + tag);
 		return Tag.getTag(reply);
 	}
 
-	private String getUrl(String master, String path) {
-		String url = "http://" + master + path;
+	public String getBlobHost(String blobUrl) {
+		int idx = blobUrl.indexOf(':') + 3;
+		String urlAndPath = blobUrl.substring(idx);
+		String res[] = urlAndPath.split("/", 2);
+		return res[0];
+	}
 
+	public String getBlob(String blobUrl) {
+		int idx = blobUrl.indexOf(':') + 3;
+		String urlAndPath = blobUrl.substring(idx);
+		String res[] = urlAndPath.split("/", 2);
+		return getUrl(res[0] + ":" + this.port, "/" + res[1]);
+	}
+
+	private String getUrl(String path) {
+		return getUrl(this.master + ":" + this.port, path);
+	}
+
+	private String getUrl(String host, String path) {
+		String url = "http://" + host + path;
 		URL obj = null;
 		try {
 			obj = new URL(url);
