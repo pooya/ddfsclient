@@ -10,7 +10,6 @@ import net.razorvine.pickle.PickleException;
 import net.razorvine.pickle.Unpickler;
 import de.undercouch.bson4jackson.io.BoundedInputStream;
 
-
 public class DdfsBlobReader implements Iterator<Object> {
 	private InputStream inputStream;
 	private ArrayList<Object> objects;
@@ -27,8 +26,8 @@ public class DdfsBlobReader implements Iterator<Object> {
 
 	private void readObjectsFromHunk() {
 		try {
-			InputStream is = new InflaterInputStream(
-					new BoundedInputStream(inputStream, hunkSize));
+			InputStream is = new InflaterInputStream(new BoundedInputStream(
+					inputStream, hunkSize));
 			while (true) {
 				try {
 					Object obj = unpickler.load(is);
