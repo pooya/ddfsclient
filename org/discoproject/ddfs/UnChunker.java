@@ -13,6 +13,9 @@ public class UnChunker {
 			if (nRead != HEADER_SIZE) {
 				return -1;
 			}
+//			for (int i =0; i < HEADER_SIZE; i++) {
+//				System.out.printf("%x\t", chunkHeader[i] & 0xff);
+//			}
 			int version = 0xff & chunkHeader[0];
 			long isCompressed = (0xff & chunkHeader[1]);
 			/*
@@ -29,10 +32,13 @@ public class UnChunker {
 				offset += 8;
 			}
 			if (version != 129) {
-				throw new RuntimeException("not implemented yet");
+				System.out.println("version:" + version +
+								   " isCompressed : " + isCompressed +
+								   " hunkSize: " + hunkSize);
+				throw new RuntimeException("version " + version + " not implemented yet.");
 			}
 			if (isCompressed != 1) {
-				throw new RuntimeException("not implemented yet");
+				throw new RuntimeException("not implemented yet" + isCompressed);
 			}
 			return hunkSize;
 		} catch (IOException e) {

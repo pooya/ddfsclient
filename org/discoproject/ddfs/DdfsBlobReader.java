@@ -1,15 +1,15 @@
 package org.discoproject.ddfs;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 import net.razorvine.pickle.PickleException;
 import net.razorvine.pickle.Unpickler;
+import de.undercouch.bson4jackson.io.BoundedInputStream;
+
 
 public class DdfsBlobReader implements Iterator<Object> {
 	private InputStream inputStream;
@@ -22,29 +22,25 @@ public class DdfsBlobReader implements Iterator<Object> {
 		this.inputStream = inputStream;
 		objects = new ArrayList<Object>();
 		unpickler = new Unpickler();
+		hunkSize = -1;
 	}
 
 	private void readObjectsFromHunk() {
-		byte[] compressedHunk = new byte[hunkSize];
-		byte[] uncompressedHunk = new byte[hunkSize * 10];
-
 		try {
-			inputStream.read(compressedHunk);
-			Inflater decompressor = new Inflater();
-			decompressor.setInput(compressedHunk);
-			decompressor.inflate(uncompressedHunk);
-			InputStream hunkInputStream = new ByteArrayInputStream(
-					uncompressedHunk);
+			InputStream is = new InflaterInputStream(
+					new BoundedInputStream(inputStream, hunkSize));
 			while (true) {
 				try {
-					Object obj = unpickler.load(hunkInputStream);
+					Object obj = unpickler.load(is);
 					objects.add(obj);
 				} catch (PickleException e) {
 					break;
 				}
 			}
 		} catch (IOException e1) {
-		} catch (DataFormatException e1) {
+			if (e1.getMessage() != "premature end of file") {
+				e1.printStackTrace();
+			}
 		}
 		hunkSize = -1;
 	}
