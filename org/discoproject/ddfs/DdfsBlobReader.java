@@ -11,13 +11,13 @@ import java.util.zip.Inflater;
 import net.razorvine.pickle.PickleException;
 import net.razorvine.pickle.Unpickler;
 
-public class DiscoRDD implements Iterator<Object> {
+public class DdfsBlobReader implements Iterator<Object> {
 	private InputStream inputStream;
 	private ArrayList<Object> objects;
 	private int hunkSize;
 	Unpickler unpickler;
 
-	public DiscoRDD(InputStream inputStream) {
+	public DdfsBlobReader(InputStream inputStream) {
 		this.inputStream = inputStream;
 		objects = new ArrayList<Object>();
 		unpickler = new Unpickler();

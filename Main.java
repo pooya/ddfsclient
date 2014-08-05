@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import org.discoproject.ddfs.Ddfs;
 import org.discoproject.ddfs.Tag;
-import org.discoproject.ddfs.DiscoRDD;
+import org.discoproject.ddfs.DdfsBlobReader;
 
 
 public class Main {
@@ -16,7 +16,7 @@ public class Main {
 		for (ArrayList<String> replica : urls) {
 			String thisBlob = replica.get(0);
 			InputStream is = ddfs.getBlob(thisBlob);
-			Iterator<Object> objs = new DiscoRDD(is);
+			Iterator<Object> objs = new DdfsBlobReader(is);
 			while (objs.hasNext()) {
 				System.out.println(objs.next());
 			}
