@@ -25,14 +25,14 @@ public class UnChunker {
 
 			for (int i = 2, offset = 0; i < 6; i++) {
 				checkSum += (0xff & chunkHeader[i]) << offset;
-				offset += 4;
+				offset += 8;
 			}
 
 			int hunkSize = 0;
 
 			for (int i = 6, offset = 0; i < 14; i++) {
 				hunkSize += (0xff & chunkHeader[i]) << offset;
-				offset += 4;
+				offset += 8;
 			}
 //			System.out.println(version + " : " + isCompressed + " : "
 //					+ checkSum + " : " + hunkSize);
