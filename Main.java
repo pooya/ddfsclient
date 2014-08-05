@@ -1,4 +1,3 @@
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -15,8 +14,7 @@ public class Main {
 		ArrayList<ArrayList<String>> urls = tag.getUrls();
 		for (ArrayList<String> replica : urls) {
 			String thisBlob = replica.get(0);
-			InputStream is = ddfs.getBlob(thisBlob);
-			Iterator<Object> objs = new DdfsBlobReader(is);
+			Iterator<Object> objs = new DdfsBlobReader(ddfs, thisBlob);
 			while (objs.hasNext()) {
 				System.out.println(objs.next());
 			}

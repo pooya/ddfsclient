@@ -17,7 +17,8 @@ public class DdfsBlobReader implements Iterator<Object> {
 	private int hunkSize;
 	Unpickler unpickler;
 
-	public DdfsBlobReader(InputStream inputStream) {
+	public DdfsBlobReader(Ddfs ddfs, String blobName) {
+		InputStream inputStream = ddfs.getBlob(blobName);
 		this.inputStream = inputStream;
 		objects = new ArrayList<Object>();
 		unpickler = new Unpickler();
