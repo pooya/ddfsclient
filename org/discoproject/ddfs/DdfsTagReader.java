@@ -8,8 +8,8 @@ public class DdfsTagReader implements Iterator<Object> {
 	private DdfsBlobReader blobReader;
 	private Ddfs ddfs;
 
-	public DdfsTagReader(String tagname) {
-		ddfs = new Ddfs("localhost", "8989");
+	public DdfsTagReader(String master, String port, String tagname) {
+		ddfs = new Ddfs(master, port);
 		Tag tag = ddfs.getTag(tagname);
 		urls = tag.getUrls().iterator();
 	}
