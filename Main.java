@@ -2,10 +2,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.discoproject.ddfs.Ddfs;
+import org.discoproject.ddfs.Tag;
+import org.discoproject.ddfs.DiscoRDD;
+
+
 public class Main {
 	public static void main(String[] args) {
 		Ddfs ddfs = new Ddfs("localhost", "8989");
-		Tag tag = ddfs.getTag("h2");
+		Tag tag = ddfs.getTag("h5");
 
 		ArrayList<ArrayList<String>> urls = tag.getUrls();
 		for (ArrayList<String> replica : urls) {
