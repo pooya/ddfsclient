@@ -1,0 +1,7 @@
+The ddfs client library depends on pyrolite and json parser:    
+    https://pythonhosted.org/Pyro4/pyrolite.html
+    json.org
+
+An example usage of this library is available in Main.java, to run:
+
+    $ java -classpath .:json-20140107.jar:pyrolite.jar Main
